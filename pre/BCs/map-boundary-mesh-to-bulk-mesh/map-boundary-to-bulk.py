@@ -32,7 +32,7 @@ def do_mapping():
     # point_ids = vtk.vtkIdTypeArray()  ## TODO why does that not work?
     # point_ids = vtk.vtkLongArray()
     point_ids = vtk.vtkUnsignedLongArray()
-    point_ids.SetName("bulk_mesh_node_ids")
+    point_ids.SetName("OriginalSubsurfaceNodeIDs")
     point_ids.SetNumberOfComponents(1)
     point_ids.SetNumberOfTuples(N_boundary)
 
