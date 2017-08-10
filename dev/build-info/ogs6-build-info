@@ -1,0 +1,50 @@
+#!/bin/sh
+
+if [ ! -f "CMakeCache.txt" ]; then
+    echo "Error: you are not in a build directory. Aborting." >&2
+    exit 1
+fi
+
+echo "== info from CMakeCache.txt =="
+(grep -E -f - CMakeCache.txt | sort ) <<EOF
+^CMAKE_BUILD_TYPE:
+^CMAKE_CXX_COMPILER:
+^OGS_EIGEN_DYNAMIC_SHAPE_MATRICES:
+^OGS_CPU_ARCHITECTURE:
+^(OGS|CMAKE)[^:]*_CXX_FLAGS[^-:]*:
+^[^:]*EIGEN[^-:]*:
+^FIND_PACKAGE_MESSAGE_DETAILS_Eigen3:
+EOF
+
+echo
+echo "== ogs info =="
+
+if [ -x bin/ogs ]; then
+    cat <<"EOF"
+$ bin/ogs --version
+EOF
+    bin/ogs --version
+else
+    echo "WARNING: bin/ogs is not executable or does not exist."
+fi
+
+echo "== compiler info =="
+compiler="`sed -ne 's/^CMAKE_CXX_COMPILER:STRING=\(.*\)$/\1/p' CMakeCache.txt`"
+arch="`sed -ne 's/^OGS_CPU_ARCHITECTURE:STRING=\(.*\)$/\1/p' CMakeCache.txt`"
+
+cat <<EOF
+$ LANG=C "$compiler" "-march=$arch" -E -v - </dev/null 2>&1
+EOF
+LANG=C "$compiler" "-march=$arch" -E -v - </dev/null 2>&1
+
+echo
+echo "== last ten git commits =="
+
+srcdir="`sed -ne 's/^CMAKE_HOME_DIRECTORY:INTERNAL=\(.*\)$/\1/p' CMakeCache.txt`"
+cat <<"EOF"
+$ git -C "$srcdir" log --oneline --decorate -n 10
+EOF
+git -C "$srcdir" log --oneline --decorate -n 10
+
+
+
