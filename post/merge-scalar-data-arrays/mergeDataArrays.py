@@ -11,7 +11,7 @@
 from vtk import *
 from sys import argv, exit
 
-if len(argv) < 6:
+if len(argv) != 6:
     print "Usage:", argv[0], "input.vtu scalar1 scalar2 vector_2d output.vtu"
     exit(1)
 
