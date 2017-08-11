@@ -1,4 +1,5 @@
 #!/usr/bin/env pvpython
+# -*- coding: utf-8 -*-
 
 import inspect
 
