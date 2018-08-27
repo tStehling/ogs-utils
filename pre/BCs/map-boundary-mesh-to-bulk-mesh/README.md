@@ -10,7 +10,7 @@
 
 ## What is output?
 
-* A nodal field `bulk_mesh_node_ids` is added to the given `--boundary` mesh.
+* A nodal field `bulk_node_ids` is added to the given `--boundary` mesh.
   This nodal field maps the nodes of the boundary mesh to the corresponding
   nodes of the `--bulk` mesh.
 * The generated `--output` mesh can be used with OGS to specify (inhomogeneous)
