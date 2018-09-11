@@ -31,3 +31,10 @@ git rebase -i COMMIT_ONTO_WHICH_TO_REBASE \
       && read -r -p 'Hit enter to continue' \
       && git commit --all --amend --no-edit"
 ```
+
+## filter-branch solution
+
+To apply `clang-format` to each commit in the range `COMMIT..HEAD` rewriting the history:
+```sh
+git filter-branch --tree-filter 'git-clang-format $GIT_COMMIT^' -- COMMIT..HEAD
+```
