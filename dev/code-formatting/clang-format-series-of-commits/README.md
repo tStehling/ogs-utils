@@ -38,3 +38,5 @@ To apply `clang-format` to each commit in the range `COMMIT..HEAD` rewriting the
 ```sh
 git filter-branch --tree-filter 'git-clang-format $GIT_COMMIT^' -- COMMIT..HEAD
 ```
+
+The command has to be applied multiple times until there are no changes.
