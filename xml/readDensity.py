@@ -195,6 +195,90 @@ def addMediumProperties(input, out):
     outfile = open(out, 'w')
     outfile.write(output)
 
+# add thermal longitudinal dispersivity as phase independent property
+def addThermalLongitudinalDispersivity(input, out, medium_id):
+    xml_path = "//OpenGeoSysProject/media/medium/properties"
+    ex = "xmlstarlet ed --subnode " + xml_path + " --type elem -n longitudinal_dispersivity_property " + input
+    process = subprocess.Popen(ex.split(), stdout=subprocess.PIPE)
+    output_stream, errors = process.communicate()
+    output = output_stream.decode()
+    outfile = open('/tmp/longitudinal_dispersivity.prj', 'w')
+    outfile.write(output)
+
+    xml_path_name = xml_path + "/longitudinal_dispersivity_property"
+    ex = "xmlstarlet ed --subnode " + xml_path_name + " --type elem -n name -v thermal_longitudinal_dispersivity /tmp/longitudinal_dispersivity.prj"
+    process = subprocess.Popen(ex.split(), stdout=subprocess.PIPE)
+    output_stream, errors = process.communicate()
+    output = output_stream.decode()
+    outfile = open('/tmp/name_longitudinal_dispersivity.prj', 'w')
+    outfile.write(output)
+
+    xml_path_type = xml_path + "/longitudinal_dispersivity_property"
+    ex = "xmlstarlet ed --subnode " + xml_path_type + " --type elem -n type -v Constant /tmp/name_longitudinal_dispersivity.prj"
+    process = subprocess.Popen(ex.split(), stdout=subprocess.PIPE)
+    output_stream, errors = process.communicate()
+    output = output_stream.decode()
+    outfile = open('/tmp/type_longitudinal_dispersivity.prj', 'w')
+    outfile.write(output)
+
+    xml_path_value = xml_path + "/longitudinal_dispersivity_property"
+    ex = "xmlstarlet ed --subnode " + xml_path_value + " --type elem -n value -v 0.0 /tmp/type_longitudinal_dispersivity.prj"
+    process = subprocess.Popen(ex.split(), stdout=subprocess.PIPE)
+    output_stream, errors = process.communicate()
+    output = output_stream.decode()
+    outfile = open('/tmp/value_longitudinal_dispersivity.prj', 'w')
+    outfile.write(output)
+
+    # rename from longitudinal_dispersivity_property to property
+    rename_cmd = "xmlstarlet ed --rename " + xml_path_name + " -v property /tmp/value_longitudinal_dispersivity.prj"
+    process = subprocess.Popen(rename_cmd.split(), stdout=subprocess.PIPE)
+    output_stream, errors = process.communicate()
+    output = output_stream.decode()
+    outfile = open(out, 'w')
+    outfile.write(output)
+
+# add thermal transversal dispersivity as phase independent property
+def addThermalTransversalDispersivity(input, out, medium_id):
+    xml_path = "//OpenGeoSysProject/media/medium/properties"
+    ex = "xmlstarlet ed --subnode " + xml_path + " --type elem -n transversal_dispersivity_property " + input
+    process = subprocess.Popen(ex.split(), stdout=subprocess.PIPE)
+    output_stream, errors = process.communicate()
+    output = output_stream.decode()
+    outfile = open('/tmp/transversal_dispersivity.prj', 'w')
+    outfile.write(output)
+
+    xml_path_name = xml_path + "/transversal_dispersivity_property"
+    ex = "xmlstarlet ed --subnode " + xml_path_name + " --type elem -n name -v thermal_transversal_dispersivity /tmp/transversal_dispersivity.prj"
+    process = subprocess.Popen(ex.split(), stdout=subprocess.PIPE)
+    output_stream, errors = process.communicate()
+    output = output_stream.decode()
+    outfile = open('/tmp/name_transversal_dispersivity.prj', 'w')
+    outfile.write(output)
+
+    xml_path_type = xml_path + "/transversal_dispersivity_property"
+    ex = "xmlstarlet ed --subnode " + xml_path_type + " --type elem -n type -v Constant /tmp/name_transversal_dispersivity.prj"
+    process = subprocess.Popen(ex.split(), stdout=subprocess.PIPE)
+    output_stream, errors = process.communicate()
+    output = output_stream.decode()
+    outfile = open('/tmp/type_transversal_dispersivity.prj', 'w')
+    outfile.write(output)
+
+    xml_path_value = xml_path + "/transversal_dispersivity_property"
+    ex = "xmlstarlet ed --subnode " + xml_path_value + " --type elem -n value -v 0.0 /tmp/type_transversal_dispersivity.prj"
+    process = subprocess.Popen(ex.split(), stdout=subprocess.PIPE)
+    output_stream, errors = process.communicate()
+    output = output_stream.decode()
+    outfile = open('/tmp/value_transversal_dispersivity.prj', 'w')
+    outfile.write(output)
+
+    # rename from transversal_dispersivity_property to property
+    rename_cmd = "xmlstarlet ed --rename " + xml_path_name + " -v property /tmp/value_transversal_dispersivity.prj"
+    process = subprocess.Popen(rename_cmd.split(), stdout=subprocess.PIPE)
+    output_stream, errors = process.communicate()
+    output = output_stream.decode()
+    outfile = open(out, 'w')
+    outfile.write(output)
+
 ### create media xml tree
 addMedia(sys.argv[1], '/tmp/media.prj')
 addMedium('/tmp/media.prj', '/tmp/medium.prj', 0)
