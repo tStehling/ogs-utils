@@ -186,6 +186,15 @@ def addProperties(input, out, phase):
     outfile = open(out, 'w')
     outfile.write(output)
 
+def addMediumProperties(input, out):
+    xml_path = "//OpenGeoSysProject/media/medium"
+    ex = "xmlstarlet ed --subnode " + xml_path + " --type elem -n properties " + input
+    process = subprocess.Popen(ex.split(), stdout=subprocess.PIPE)
+    output_stream, errors = process.communicate()
+    output = output_stream.decode()
+    outfile = open(out, 'w')
+    outfile.write(output)
+
 ### create media xml tree
 addMedia(sys.argv[1], '/tmp/media.prj')
 addMedium('/tmp/media.prj', '/tmp/medium.prj', 0)
