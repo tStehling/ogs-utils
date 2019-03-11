@@ -326,9 +326,14 @@ addMedia(sys.argv[1], '/tmp/media.prj')
 addMedium('/tmp/media.prj', '/tmp/medium.prj', 0)
 addPhases('/tmp/medium.prj', '/tmp/phases.prj')
 addPhase('/tmp/phases.prj', '/tmp/phase.prj', 'AqueousLiquid')
-addProperties('/tmp/phase.prj', '/tmp/properties.prj', 'AqueousLiquid')
+addProperties('/tmp/phase.prj', '/tmp/aqueous_properties.prj', 'AqueousLiquid')
+addMediumProperties('/tmp/aqueous_properties.prj', '/tmp/medium_properties.prj')
+addThermalLongitudinalDispersivity('/tmp/medium_properties.prj', '/tmp/thermal_longitudinal_dispersivity.prj', 0)
+addThermalTransversalDispersivity('/tmp/thermal_longitudinal_dispersivity.prj', '/tmp/thermal_transversal_dispersivity.prj', 0)
+addSpecificHeatCapacity('/tmp/thermal_transversal_dispersivity.prj', '/tmp/specific_heat_capacity.prj', 0)
+
 # rename
-rename='cp /tmp/properties.prj ' + sys.argv[1]
+rename='cp /tmp/specific_heat_capacity.prj ' + sys.argv[1]
 rename_process = subprocess.Popen(rename.split(), stdout=subprocess.PIPE)
 
 ### read the density
