@@ -279,6 +279,48 @@ def addThermalTransversalDispersivity(input, out, medium_id):
     outfile = open(out, 'w')
     outfile.write(output)
 
+# add specific heat capacity as phase independent property
+def addSpecificHeatCapacity(input, out, medium_id):
+    xml_path = "//OpenGeoSysProject/media/medium/properties"
+    ex = "xmlstarlet ed --subnode " + xml_path + " --type elem -n specific_heat_capacity_property " + input
+    process = subprocess.Popen(ex.split(), stdout=subprocess.PIPE)
+    output_stream, errors = process.communicate()
+    output = output_stream.decode()
+    outfile = open('/tmp/specific_heat_capacity.prj', 'w')
+    outfile.write(output)
+
+    xml_path_name = xml_path + "/specific_heat_capacity_property"
+    ex = "xmlstarlet ed --subnode " + xml_path_name + " --type elem -n name -v specific_heat_capacity /tmp/specific_heat_capacity.prj"
+    process = subprocess.Popen(ex.split(), stdout=subprocess.PIPE)
+    output_stream, errors = process.communicate()
+    output = output_stream.decode()
+    outfile = open('/tmp/name_specific_heat_capacity.prj', 'w')
+    outfile.write(output)
+
+    xml_path_type = xml_path + "/specific_heat_capacity_property"
+    ex = "xmlstarlet ed --subnode " + xml_path_type + " --type elem -n type -v Constant /tmp/name_specific_heat_capacity.prj"
+    process = subprocess.Popen(ex.split(), stdout=subprocess.PIPE)
+    output_stream, errors = process.communicate()
+    output = output_stream.decode()
+    outfile = open('/tmp/type_specific_heat_capacity.prj', 'w')
+    outfile.write(output)
+
+    xml_path_value = xml_path + "/specific_heat_capacity_property"
+    ex = "xmlstarlet ed --subnode " + xml_path_value + " --type elem -n value -v 4200 /tmp/type_specific_heat_capacity.prj"
+    process = subprocess.Popen(ex.split(), stdout=subprocess.PIPE)
+    output_stream, errors = process.communicate()
+    output = output_stream.decode()
+    outfile = open('/tmp/value_specific_heat_capacity.prj', 'w')
+    outfile.write(output)
+
+    # rename from specific_heat_capacity_property to property
+    rename_cmd = "xmlstarlet ed --rename " + xml_path_name + " -v property /tmp/value_specific_heat_capacity.prj"
+    process = subprocess.Popen(rename_cmd.split(), stdout=subprocess.PIPE)
+    output_stream, errors = process.communicate()
+    output = output_stream.decode()
+    outfile = open(out, 'w')
+    outfile.write(output)
+
 ### create media xml tree
 addMedia(sys.argv[1], '/tmp/media.prj')
 addMedium('/tmp/media.prj', '/tmp/medium.prj', 0)
