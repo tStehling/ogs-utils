@@ -54,39 +54,74 @@ class LinearProperty:
         path = self.xml_path
         node = "property_density"
         node_cmd = ex + " --subnode " + path + " --type elem -n " + node + " " + file_name
-        print(node_cmd)
         process = subprocess.Popen(node_cmd.split(), stdout=subprocess.PIPE)
         output_stream, errors = process.communicate()
         output = output_stream.decode()
         outfile = open('/tmp/2.prj', 'w')
         outfile.write(output)
 
-        exit()
-
         ppath = path + "/" + node
-        subnode_cmd = ex + " --subnode \"" + ppath + "\" --type elem"
-        name_cmd = subnode_cmd + " -n \"name\" -v \"density\"" + "/tmp/2.prj  > /tmp/3.prj"
+        subnode_cmd = ex + " --subnode " + ppath + " --type elem"
+        name_cmd = subnode_cmd + " -n name -v density /tmp/2.prj"
         process = subprocess.Popen(name_cmd.split(), stdout=subprocess.PIPE)
-        type_cmd = subnode_cmd + " -n \"type\" -v \"Linear\" /tmp/3.prj  > /tmp/4.prj"
-        process = subprocess.Popen(type_cmd.split(), stdout=subprocess.PIPE)
-        value_cmd = subnode_cmd + " -n \"reference_value\" -v \"" + str(self.ref_value) + "\" /tmp/4.prj  > /tmp/5.prj"
-        process = subprocess.Popen(value_cmd.split(), stdout=subprocess.PIPE)
-        # independent_variable
-        iv_cmd = subnode_cmd + " -n \"independent_value\" /tmp/5.prj  > /tmp/6.prj"
-        process = subprocess.Popen(iv_cmd.split(), stdout=subprocess.PIPE)
-        iv_path = ppath + "/independent_variable"
-        #   variable_name
-        iv_name_cmd = ex + " --subnode \"" + iv_path + "\"variable_name\" -v \"" + str(self.variable_name) + "\" /tmp/6.prj  > /tmp/7.prj"
-        process = subprocess.Popen(iv_name_cmd.split(), stdout=subprocess.PIPE)
-        #   reference_condition
-        iv_reference_condition_cmd = ex + " --subnode \"" + iv_path + "\"reference_condition\" -v \"" + str(self.ref_condition) + "\" /tmp/7.prj  > /tmp/8.prj"
-        process = subprocess.Popen(iv_reference_condition_cmd.split(), stdout=subprocess.PIPE)
-        #   slope
-        iv_slope_cmd = ex + " --subnode \"" + iv_path + "\"slope\" -v \"" + str(self.slope) + "\" /tmp/8.prj  > /tmp/9.prj"
-        process = subprocess.Popen(iv_reference_condition_cmd.split(), stdout=subprocess.PIPE)
+        output_stream, errors = process.communicate()
+        output = output_stream.decode()
+        outfile = open('/tmp/3.prj', 'w')
+        outfile.write(output)
 
-        rename_cmd = ex + " --rename \"" + ppath + "\" -v \"property\" /tmp/9.prj  > " + file_name
+        type_cmd = subnode_cmd + " -n type -v Linear /tmp/3.prj"
+        process = subprocess.Popen(type_cmd.split(), stdout=subprocess.PIPE)
+        output_stream, errors = process.communicate()
+        output = output_stream.decode()
+        outfile = open('/tmp/4.prj', 'w')
+        outfile.write(output)
+
+        value_cmd = subnode_cmd + " -n reference_value -v " + str(self.ref_value) + " /tmp/4.prj"
+        process = subprocess.Popen(value_cmd.split(), stdout=subprocess.PIPE)
+        output_stream, errors = process.communicate()
+        output = output_stream.decode()
+        outfile = open('/tmp/5.prj', 'w')
+        outfile.write(output)
+
+        # independent_variable
+        iv_cmd = subnode_cmd + " -n independent_variable /tmp/5.prj"
+        process = subprocess.Popen(iv_cmd.split(), stdout=subprocess.PIPE)
+        output_stream, errors = process.communicate()
+        output = output_stream.decode()
+        outfile = open('/tmp/6.prj', 'w')
+        outfile.write(output)
+
+        #   variable_name
+        iv_path = ppath + "/independent_variable"
+        iv_name_cmd = ex + " --subnode " + iv_path + " --type elem -n variable_name -v " + str(self.variable_name) + " /tmp/6.prj"
+        process = subprocess.Popen(iv_name_cmd.split(), stdout=subprocess.PIPE)
+        output_stream, errors = process.communicate()
+        output = output_stream.decode()
+        outfile = open('/tmp/7.prj', 'w')
+        outfile.write(output)
+
+        #   reference_condition
+        iv_reference_condition_cmd = ex + " --subnode " + iv_path + " --type elem -n reference_condition -v " + str(self.ref_condition) + " /tmp/7.prj"
+        process = subprocess.Popen(iv_reference_condition_cmd.split(), stdout=subprocess.PIPE)
+        output_stream, errors = process.communicate()
+        output = output_stream.decode()
+        outfile = open('/tmp/8.prj', 'w')
+        outfile.write(output)
+
+        #   slope
+        iv_slope_cmd = ex + " --subnode " + iv_path + " --type elem -n slope -v " + str(self.slope) + " /tmp/8.prj"
+        process = subprocess.Popen(iv_slope_cmd.split(), stdout=subprocess.PIPE)
+        output_stream, errors = process.communicate()
+        output = output_stream.decode()
+        outfile = open('/tmp/9.prj', 'w')
+        outfile.write(output)
+
+        rename_cmd = ex + " --rename " + ppath + " -v property /tmp/9.prj"
         process = subprocess.Popen(rename_cmd.split(), stdout=subprocess.PIPE)
+        output_stream, errors = process.communicate()
+        output = output_stream.decode()
+        outfile = open(file_name, 'w')
+        outfile.write(output)
 
 def addMedia(input, out):
     xml_path = "//OpenGeoSysProject/time_loop"
