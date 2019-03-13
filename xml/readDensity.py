@@ -10,34 +10,46 @@ class ConstantProperty:
         self.xml_path = "//OpenGeoSysProject/media/medium/phases/phase/properties"
 
     def writeAsMediumPropertyToFile(self, file_name):
-        print("writeAsMediumPropertyToFile ...")
+        print("ConstantProperty: writeAsMediumPropertyToFile ...")
         ex = "xmlstarlet ed "
         path = self.xml_path
-        node = "property_density"
-        node_cmd = ex + " --subnode \"" + path + "\" --type elem -n \"node\"" + file_name
+        node = "property_xyz"
+        node_cmd = ex + " --subnode " + path + " --type elem -n " + node + " " + file_name
         process = subprocess.Popen(node_cmd.split(), stdout=subprocess.PIPE)
         output_stream, errors = process.communicate()
         output = output_stream.decode()
         outfile = open('/tmp/2.prj', 'w')
         outfile.write(output)
-        exit()
 
         ppath = path + "/" + node
-        subnode_cmd = ex + " --subnode \"" + ppath + "\" --type elem"
-        name_cmd = subnode_cmd + " -n \"name\" -v \"density\"" + "/tmp/2.prj"
+        subnode_cmd = ex + " --subnode " + ppath + " --type elem"
+        name_cmd = subnode_cmd + " -n name -v " + self.name + " /tmp/2.prj"
         process = subprocess.Popen(name_cmd.split(), stdout=subprocess.PIPE)
-        process = subprocess.Popen(node_cmd.split(), stdout=subprocess.PIPE)
         output_stream, errors = process.communicate()
         output = output_stream.decode()
         outfile = open('/tmp/3.prj', 'w')
         outfile.write(output)
 
-        type_cmd = subnode_cmd + " -n \"type\" -v \"Constant\" /tmp/3.prj  > /tmp/4.prj"
+        type_cmd = subnode_cmd + " -n type -v Constant /tmp/3.prj"
         process = subprocess.Popen(type_cmd.split(), stdout=subprocess.PIPE)
-        value_cmd = subnode_cmd + " -n \"value\" -v \"" + str(value) + "\" /tmp/4.prj  > /tmp/5.prj"
+        output_stream, errors = process.communicate()
+        output = output_stream.decode()
+        outfile = open('/tmp/4.prj', 'w')
+        outfile.write(output)
+
+        value_cmd = subnode_cmd + " -n value -v " + str(self.value) + " /tmp/4.prj"
         process = subprocess.Popen(value_cmd.split(), stdout=subprocess.PIPE)
-        rename_cmd = ex + " --rename \"" + ppath + "\" -v \"property\" /tmp/5.prj  > " + file_name
+        output_stream, errors = process.communicate()
+        output = output_stream.decode()
+        outfile = open('/tmp/5.prj', 'w')
+        outfile.write(output)
+
+        rename_cmd = ex + " --rename " + ppath + " -v property /tmp/5.prj"
         process = subprocess.Popen(rename_cmd.split(), stdout=subprocess.PIPE)
+        output_stream, errors = process.communicate()
+        output = output_stream.decode()
+        outfile = open(file_name, 'w')
+        outfile.write(output)
 
 class LinearProperty:
     def __init__(self, name, ref_value, variable_name, slope, ref_condition):
