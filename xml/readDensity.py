@@ -428,3 +428,10 @@ if (viscosity_type == 'TemperatureDependent'):
     temperature_viscosity = LinearProperty('viscosity', viscosity_reference, 'temperature', slope, temperature_reference)
     temperature_viscosity.writeAsMediumPropertyToFile(sys.argv[1])
 
+### read the thermal_conductivity_fluid
+thermal_conductivity_fluid_parameter_command = "xmlstarlet sel -T -t -v //OpenGeoSysProject/processes/process/fluid/thermal_conductivity_fluid " + sys.argv[1]
+process = subprocess.Popen(thermal_conductivity_fluid_parameter_command.split(), stdout=subprocess.PIPE)
+thermal_conductivity_fluid_parameter_byte_stream, error = process.communicate()
+thermal_conductivity_fluid_parameter = thermal_conductivity_fluid_parameter_byte_stream.decode()
+constant_thermal_conductivity_fluid = ConstantProperty('thermal_conductivity', 0.65)
+constant_thermal_conductivity_fluid.writeAsMediumPropertyToFile(sys.argv[1])
