@@ -394,3 +394,37 @@ if (density_type == 'TemperatureDependent'):
     temperature_density = LinearProperty('density', density_reference, 'temperature', slope, temperature_reference)
     temperature_density.writeAsMediumPropertyToFile(sys.argv[1])
 
+### read the viscosity
+# read property type: ConstantProperty or LinearProperty
+viscosity_type_command = "xmlstarlet sel -T -t -v //OpenGeoSysProject/processes/process/fluid/viscosity/type " + sys.argv[1]
+process = subprocess.Popen(viscosity_type_command.split(), stdout=subprocess.PIPE)
+viscosity_type_byte_stream, error = process.communicate()
+
+viscosity_type = viscosity_type_byte_stream.decode()
+if (viscosity_type == 'Constant'):
+    viscosity_value_cmd = "xmlstarlet sel -T -t -v //OpenGeoSysProject/processes/process/fluid/viscosity/value " + sys.argv[1]
+    process = subprocess.Popen(viscosity_value_cmd.split(), stdout=subprocess.PIPE)
+    viscosity_value_stream, error = process.communicate()
+    viscosity_value = viscosity_value_stream.decode()
+    constant_viscosity = ConstantProperty('viscosity', viscosity_value)
+    constant_viscosity.writeAsMediumPropertyToFile(sys.argv[1])
+
+if (viscosity_type == 'TemperatureDependent'):
+    viscosity_reference_cmd = "xmlstarlet sel -T -t -v //OpenGeoSysProject/processes/process/fluid/viscosity/rho0 " + sys.argv[1]
+    process = subprocess.Popen(viscosity_reference_cmd.split(), stdout=subprocess.PIPE)
+    viscosity_reference_stream, error = process.communicate()
+    viscosity_reference = viscosity_reference_stream.decode()
+
+    temperature_reference_cmd = "xmlstarlet sel -T -t -v //OpenGeoSysProject/processes/process/fluid/viscosity/temperature0 " + sys.argv[1]
+    process = subprocess.Popen(temperature_reference_cmd.split(), stdout=subprocess.PIPE)
+    temperature_reference_stream, error = process.communicate()
+    temperature_reference = temperature_reference_stream.decode()
+
+    slope_cmd = "xmlstarlet sel -T -t -v //OpenGeoSysProject/processes/process/fluid/viscosity/beta " + sys.argv[1]
+    process = subprocess.Popen(slope_cmd.split(), stdout=subprocess.PIPE)
+    slope_stream, error = process.communicate()
+    slope = slope_stream.decode()
+
+    temperature_viscosity = LinearProperty('viscosity', viscosity_reference, 'temperature', slope, temperature_reference)
+    temperature_viscosity.writeAsMediumPropertyToFile(sys.argv[1])
+
