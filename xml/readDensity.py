@@ -372,7 +372,7 @@ if (density_type == 'Constant'):
     process = subprocess.Popen(density_value_cmd.split(), stdout=subprocess.PIPE)
     density_value_stream, error = process.communicate()
     density_value = density_value_stream.decode()
-    constant_density = ConstantProperty(density_type, density_value)
+    constant_density = ConstantProperty('density', density_value)
     constant_density.writeAsMediumPropertyToFile(sys.argv[1])
 
 if (density_type == 'TemperatureDependent'):
