@@ -333,6 +333,14 @@ def addSpecificHeatCapacity(input, out, medium_id):
     outfile = open(out, 'w')
     outfile.write(output)
 
+def removeTag(input, output, xml_path):
+    ex = "xmlstarlet ed --delete " + xml_path + " " + input
+    process = subprocess.Popen(ex.split(), stdout=subprocess.PIPE)
+    output_stream, errors = process.communicate()
+    output_string = output_stream.decode()
+    outfile = open(output, 'w')
+    outfile.write(output_string)
+
 ### create media xml tree
 addMedia(sys.argv[1], '/tmp/media.prj')
 addMedium('/tmp/media.prj', '/tmp/medium.prj', 0)
@@ -344,8 +352,12 @@ addThermalLongitudinalDispersivity('/tmp/medium_properties.prj', '/tmp/thermal_l
 addThermalTransversalDispersivity('/tmp/thermal_longitudinal_dispersivity.prj', '/tmp/thermal_transversal_dispersivity.prj', 0)
 addSpecificHeatCapacity('/tmp/thermal_transversal_dispersivity.prj', '/tmp/specific_heat_capacity.prj', 0)
 
+### remove old tags
+removeTag('/tmp/specific_heat_capacity.prj', '/tmp/removed_old_tags_1.prj', "//OpenGeoSysProject/processes/process/thermal_dispersivity")
+removeTag('/tmp/removed_old_tags_1.prj', '/tmp/removed_old_tags_2.prj', "//OpenGeoSysProject/processes/process/thermal_conductivity_fluid")
+
 # rename
-rename='cp /tmp/specific_heat_capacity.prj ' + sys.argv[1]
+rename='cp /tmp/removed_old_tags_2.prj ' + sys.argv[1]
 rename_process = subprocess.Popen(rename.split(), stdout=subprocess.PIPE)
 
 ### read the density
