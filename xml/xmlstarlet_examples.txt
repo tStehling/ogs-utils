@@ -1,0 +1,45 @@
+xmlstarlet sel -t -m "//*[parameter]"  th_decovalex.prj
+xmlstarlet sel -t -c "//*[parameter]"  th_decovalex.prj
+xmlstarlet sel -t -v "//*[parameter]"  th_decovalex.prj
+xmlstarlet sel -t -c "//*[parameter]"  th_decovalex.prj
+xmlstarlet sel -t -c "//*/parameter"  th_decovalex.prj
+xmlstarlet sel -t -c "//*/parameter/name"  th_decovalex.prj
+xmlstarlet sel -t -c "//*/parameter/name[]"  th_decovalex.prj
+xmlstarlet sel -t -c "//*/parameter/name[1]"  th_decovalex.prj
+xmlstarlet sel -t -c "//*/parameter/name[2]"  th_decovalex.prj
+xmlstarlet sel -t -c "//*/parameter/name[text()==mu1]"  th_decovalex.prj
+xmlstarlet sel -t -c "//*/parameter/name[text()=mu1]"  th_decovalex.prj
+xmlstarlet sel -t -c "//*/parameter/name[text()='mu1']"  th_decovalex.prj
+xmlstarlet sel -t -c "//*/parameter/name[text()='mu1'].."  th_decovalex.prj
+xmlstarlet sel -t -c "//*/parameter/name[text()='mu1']/.."  th_decovalex.prj
+xmlstarlet sel -t -c "//*/parameter/name[text()='mu1']/.." -m "*" th_decovalex.prj
+xmlstarlet sel -t -c "//*/parameter/name[text()='mu1']/.." -c "/.." th_decovalex.prj
+xmlstarlet sel -t -m "//*/parameter/name[text()='mu1']/.." -c "/.." th_decovalex.prj
+xmlstarlet sel -t -m "//*/parameter/name[text()='mu1']/.." -c "./.." th_decovalex.prj
+xmlstarlet sel -t -m "//*/parameter/name[text()='mu1']/.." -c "./.." th_decovalex.prj | less
+xmlstarlet sel -t -m "//*/parameter/name[text()='mu1']" -c "./.." th_decovalex.prj | less
+xmlstarlet sel -t -m "//*/parameter/name[text()='mu1']/.." -c "./name" th_decovalex.prj | less
+xmlstarlet sel -t -m "//*/parameter/name[text()='mu1']/.." -v "./name" th_decovalex.prj | less
+xmlstarlet sel -t -m "//*/parameter/name[text()='mu1']/.." -v "./type" th_decovalex.prj | less
+xmlstarlet sel -t -m "//*/parameter/name[text()='mu1']/.." -c "./value" th_decovalex.prj | less
+xmlstarlet sel -t -m "//*/parameter/name[text()='mu1']/.." -c "./value|values" th_decovalex.prj | less
+xmlstarlet sel -t -m "//*/parameter/name[text()='mu1']/.." -m "./type[text()='Constant']" -c "." th_decovalex.prj | less
+xmlstarlet sel -t -m "//*/parameter/name[text()='mu1']/.." -m "./type[text()='Constant']" -c "./.." th_decovalex.prj | less
+xmlstarlet sel -t -m "//*/parameter/name/.." -m "./type[text()='Constant']" -c "./.." th_decovalex.prj | less
+xmlstarlet sel -t -m "//*/parameter/name/.." -m "./type[text()!='Constant']" -c "./.." th_decovalex.prj | less
+xmlstarlet sel -t -m "//*/parameter/name/.." -m "./[type!='Constant']" -c "./.." th_decovalex.prj | less
+xmlstarlet sel -t -m "//*/parameter/name/.." -m "./[value>0]" -c "./.." th_decovalex.prj | less
+xmlstarlet sel -t -m "//*/parameter/name/.." -m ".[value>0]" -c "./.." th_decovalex.prj | less
+xmlstarlet sel -t -m "//*/parameter[value>0]" -c "./.." th_decovalex.prj | less
+xmlstarlet sel -t -m "//*/parameter[value>0]" -c "./" th_decovalex.prj | less
+xmlstarlet sel -t -m "//*/parameter[value>0]" -c "." th_decovalex.prj | less
+xmlstarlet sel -t -m "//*/parameter[name=='mu1']" -c "." th_decovalex.prj | less
+xmlstarlet sel -t -m "//*/parameter[name='mu1']" -c "." th_decovalex.prj | less
+xmlstarlet sel -t -m "//*/parameter[name='mu1' and type='Constant']" -c "." th_decovalex.prj | less
+xmlstarlet sel -t -m "//*/parameter[name='mu1' and type='Constant']" -v "./value" th_decovalex.prj | less
+xmlstarlet sel -t -m "//*/parameter[name='mu1' and type='Constant']" -v "./value|values" th_decovalex.prj | less
+man xmlstarlen
+man xmlstarlet
+xmlstarlet sel -t -m "//*/parameter[name='mu1' and type='Constant']" -v "./value|values" th_decovalex.prj -C| less
+xmlstarlet -C sel -t -m "//*/parameter[name='mu1' and type='Constant']" -v "./value|values" th_decovalex.prj| less
+xmlstarlet sel -C -t -m "//*/parameter[name='mu1' and type='Constant']" -v "./value|values" th_decovalex.prj| less
