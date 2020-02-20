@@ -332,9 +332,8 @@ def removeMaterialProperty(root, property_type, property_name, phase,
         values = getVanGenuchtenRelativePermeabilityValues(material_property)
         removeXmlSubtree(material_property)
 
-def addFluidPropertyWithMplProperty(root, property_type, property_name,
-                                        phase, mpl_property_name,
-                                        porous_medium_id):
+def addFluidPhaseMPLProperty(root, property_type, property_name, phase,
+                             mpl_property_name, porous_medium_id):
     props = getPhaseProperties(root, phase, porous_medium_id)
     assert props is not None
 
@@ -446,7 +445,7 @@ def processFile(filename):
             addMPLMaterialProperty(tree.getroot(), *entry, porous_medium_id)
 
         for entry in liquid_property_table:
-            addFluidPropertyWithMplProperty(tree.getroot(), *entry, porous_medium_id)
+            addFluidPhaseMPLProperty(tree.getroot(), *entry, porous_medium_id)
 
     for porous_medium_id in range(0, number_porous_medium_tags):
         for entry in liquid_property_table:
