@@ -113,6 +113,12 @@ def readDupuitPermeabilityTensorParameter(tree):
 
     return None
 
+def addReferenceTemperature(root, porous_medium_id):
+    props = getPhaseProperties(root, 'Medium', porous_medium_id)
+    props.append(ET.XML("<property><name>reference_temperature</name><type>" + \
+                        "Constant</type><value>293.15</value>" + \
+                        "</property>"))
+
 def mplAppendConstant(mpl_properties, name, value):
     mpl_properties.append(ET.XML("<property><name>" + name + "</name><type>" + \
                         "Constant</type><value>" + value + "</value>" + \
@@ -446,6 +452,8 @@ def processFile(filename):
 
         for entry in liquid_property_table:
             addFluidPhaseMPLProperty(tree.getroot(), *entry, porous_medium_id)
+
+        addReferenceTemperature(tree.getroot(), porous_medium_id)
 
     for porous_medium_id in range(0, number_porous_medium_tags):
         for entry in liquid_property_table:
