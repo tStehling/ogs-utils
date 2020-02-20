@@ -105,6 +105,14 @@ def readConstantPermeabilityTensorEntries(tree):
 
     return None
 
+def readDupuitPermeabilityTensorParameter(tree):
+    type = tree.find("./type").text
+    if type == "Dupuit":
+        if (parameter := tree.find("./permeability_tensor_entries")) is not None:
+            return parameter.text
+
+    return None
+
 def mplAppendConstant(mpl_properties, name, value):
     mpl_properties.append(ET.XML("<property><name>" + name + "</name><type>" + \
                         "Constant</type><value>" + value + "</value>" + \
@@ -113,6 +121,11 @@ def mplAppendConstant(mpl_properties, name, value):
 def mplAppendParameter(mpl_properties, tag_name, parameter_name):
     mpl_properties.append(ET.XML("<property><name>" + tag_name + "</name><type>" + \
                         "Parameter</type><parameter_name>" + parameter_name + \
+                        "</parameter_name></property>"))
+
+def mplAppendDupuitParameter(mpl_properties, tag_name, parameter_name):
+    mpl_properties.append(ET.XML("<property><name>" + tag_name + "</name><type>" + \
+                        "Dupuit</type><parameter_name>" + parameter_name + \
                         "</parameter_name></property>"))
 
 def getVanGenuchtenSaturationValues(material_property):
@@ -221,7 +234,6 @@ def addMPLMaterialProperty(root, property_type, property_name, phase,
 
     if p := readConstantPorosityParameter(material_property):
         # Find parameter
-        ET.dump(root)
         param = root.find("./parameters/parameter/[name='" + p + "']")
         if v := readConstantValue(param):
             mplAppendConstant(props, property_name, v)
@@ -235,11 +247,15 @@ def addMPLMaterialProperty(root, property_type, property_name, phase,
         if parameterUsesLocalCoordinateSystem(param):
             # Keep parameters with local coord systems as they are.
             mplAppendParameter(props, property_name, p)
-            removeXmlSubtree(material_property)
-        if v := readConstantValue(param):
+        if v := readDupuitConstantValue(param):
             mplAppendConstant(props, property_name, v)
-            removeXmlSubtree(material_property)
-            #removeXmlSubtree(param)
+        return
+
+    if p := readDupuitPermeabilityTensorParameter(material_property):
+        # Find parameter
+        param = root.find("./parameters/parameter/[name='" + p + "']")
+        # Keep parameters for Dupuit permeability as they are.
+        mplAppendDupuitParameter(props, property_name, p)
         return
 
     if (property_name == "relative_permeability" \
@@ -296,6 +312,10 @@ def removeMaterialProperty(root, property_type, property_name, phase,
         if v := readConstantValue(param):
             removeXmlSubtree(material_property)
             removeXmlSubtree(param)
+        return
+
+    if p := readDupuitPermeabilityTensorParameter(material_property):
+        removeXmlSubtree(material_property)
         return
 
     if (property_name == "relative_permeability" \
