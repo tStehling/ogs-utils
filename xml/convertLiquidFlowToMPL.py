@@ -253,7 +253,7 @@ def addMPLMaterialProperty(root, property_type, property_name, phase,
         if parameterUsesLocalCoordinateSystem(param):
             # Keep parameters with local coord systems as they are.
             mplAppendParameter(props, property_name, p)
-        if v := readDupuitConstantValue(param):
+        if v := readConstantValue(param):
             mplAppendConstant(props, property_name, v)
         return
 
