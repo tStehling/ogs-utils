@@ -312,6 +312,8 @@ def removeMaterialProperty(root, property_type, property_name, phase,
     if p := readConstantPermeabilityTensorEntries(material_property):
         # Find parameter
         param = root.find("./parameters/parameter/[name='" + p + "']")
+        if param == None:
+            return
         if parameterUsesLocalCoordinateSystem(param):
             # Keep parameters with local coord systems as they are.
             removeXmlSubtree(material_property)
