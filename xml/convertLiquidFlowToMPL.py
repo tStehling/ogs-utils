@@ -230,8 +230,8 @@ def addMPLMaterialProperty(root, property_type, property_name, phase,
                                   + str(porous_medium_id)
                                   + "\"]/" + property_name)
     if material_property == None:
-        print("Material property", property_type + "/" + property_name,
-              "not found")
+        #print("Material property", property_type + "/" + property_name,
+        #      "not found")
         return
 
     if v := readConstantValue(material_property):
@@ -380,11 +380,9 @@ def recursevelyEmpty(tree):
     #print("Recursively empty checking:", '<' + tree.tag + '>', "with text", tree.text)
     if tree is None:
         print("Recursively empty found got an non-existing tree.")
-        print("RETURN False")
         return False    # non-exisiting tree is not empty, s.t. it will not be deleted
     if tree.text is not None:
         print("Recursively empty found this non-empty part:", '<' + tree.tag + '>', "with text", tree.text)
-        print("RETURN False")
         return False
     all_recursively_empty = all(recursevelyEmpty(c) for c in tree.iterchildren())
     print("RETURN", all_recursively_empty)
