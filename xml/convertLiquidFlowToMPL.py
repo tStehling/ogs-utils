@@ -226,7 +226,9 @@ def addMPLMaterialProperty(root, property_type, property_name, phase,
 
     #print("Material property", property_type + "/" + property_name)
     material_property = root.find("./processes/process/material_property/" +
-                                  property_type + "/" + property_name)
+                                  property_type + "[@id=\""
+                                  + str(porous_medium_id)
+                                  + "\"]/" + property_name)
     if material_property == None:
         print("Material property", property_type + "/" + property_name,
               "not found")
@@ -290,7 +292,9 @@ def removeMaterialProperty(root, property_type, property_name, phase,
 
     #print("Material property", property_type + "/" + property_name)
     material_property = root.find("./processes/process/material_property/" +
-                                  property_type + "/" + property_name)
+                                  property_type + "[@id=\""
+                                  + str(porous_medium_id)
+                                  + "\"]/" + property_name)
     if material_property == None:
         print("Material property", property_type + "/" + property_name,
               "not found")
@@ -313,10 +317,8 @@ def removeMaterialProperty(root, property_type, property_name, phase,
         # Find parameter
         param = root.find("./parameters/parameter/[name='" + p + "']")
         if param == None:
-            return
-        if parameterUsesLocalCoordinateSystem(param):
-            # Keep parameters with local coord systems as they are.
             removeXmlSubtree(material_property)
+            return
         if v := readConstantValue(param):
             removeXmlSubtree(material_property)
             removeXmlSubtree(param)
