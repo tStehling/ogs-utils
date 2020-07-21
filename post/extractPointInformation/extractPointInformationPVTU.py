@@ -1,12 +1,24 @@
 #!/usr/bin/env python
 
 import sys
-from paraview.simple import *
+from vtk import *
 from pathlib import Path
+from lxml import etree as ET
 
 def readPVTU(filename):
-    unstructured_grid = XMLPartitionedUnstructuredGridReader(FileName=filename)
-    return unstructured_grid
+    tree = ET.parse(filename)
+    root = tree.getroot()
+    pvtu_files = {}
+    pvtu_files['filename'] = []
+    for piece in root.xpath('//Piece'):
+        pvtu_files['filename'].append(piece.attrib['Source'])
+    return pvtu_files
+
+def readVTU(filename):
+    reader = vtkXMLUnstructuredGridReader()
+    reader.SetFileName(filename)
+    reader.Update()
+    return reader.GetOutput()
 
 def extractBulkPointData(bulk_vtu, bulk_node_id, array_name):
     point_data = bulk_vtu.GetPointData()
@@ -18,21 +30,52 @@ def extractBulkNodeIDFromPointVTU(point_vtu):
     bulk_node_ids = point_data.GetArray('bulk_node_ids')
     return bulk_node_ids.GetTuple1(0)
 
-bulk_pvtu = readPVTU(sys.argv[1])
-print('bulk_pvtu point data: ' + str(bulk_pvtu.GetPointDataInformation()))
-print('bulk_pvtu list properties: ' + str(bulk_pvtu.ListProperties()))
+def extractBulkNodeCoordinatesFromPointVTU(point_vtu):
+    return point_vtu.GetPoint(0)
 
-#bulk_node_ids = {}
-#bulk_node_ids['filename'] = []
-#bulk_node_ids['id'] = []
-#
-#for i in range(2, len(sys.argv)):
-#    bulk_node_ids['filename'].append(sys.argv[i])
-#    point_vtu = readVTU(sys.argv[i])
-#    bulk_node_ids['id'].append(int(extractBulkNodeIDFromPointVTU(point_vtu)))
-#
-#for i in range(0, len(bulk_node_ids['id'])):
-#    array_name = 'T'
-#    print(Path(bulk_node_ids['filename'][i]).stem + ' ' + str(extractBulkPointData(bulk_vtu, bulk_node_ids['id'][i], 'T')))
+def extractPartitionNumberFromFileName(filename):
+    file_name = Path(filename).stem
+    partition = int(file_name.rpartition('_')[2])
+    return partition
 
+def extractFileNameWithoutPartitionNumber(filename):
+    file_name = Path(filename).stem
+    return file_name.rpartition('_')[0]
+
+def extractStationNameFromFileName(filename):
+    file_name = (Path(filename).stem).rpartition('_ts_')[0]
+    return file_name.partition('20a_')[2]
+
+def extractPartitionAndNodeIDAndStationName(point_mesh_pvtu_filename):
+    point_vtu_filenames = readPVTU(point_mesh_pvtu_filename)
+    point_vtu_filename = point_vtu_filenames['filename'][0]
+    station_name = extractStationNameFromFileName(point_vtu_filename)
+    point_partition = extractPartitionNumberFromFileName(point_vtu_filename)
+    bulk_node_id = int(extractBulkNodeIDFromPointVTU(readVTU(point_vtu_filename)))
+    return point_partition, bulk_node_id, station_name
+
+def readPointMeshInformation(argv):
+    point_mesh_information = {}
+    point_mesh_information['partition'] = []
+    point_mesh_information['bulk_node_id'] = []
+    point_mesh_information['station_name'] = []
+    for i in range(2, len(argv)):
+        point_partition, bulk_node_id, station_name = extractPartitionAndNodeIDAndStationName(sys.argv[i])
+        point_mesh_information['partition'].append(point_partition)
+        point_mesh_information['bulk_node_id'].append(bulk_node_id)
+        point_mesh_information['station_name'].append(station_name)
+    return point_mesh_information
+
+# subsurface mesh
+subsurface_mesh_pvtu_filename = sys.argv[1]
+bulk_vtu_filenames = readPVTU(subsurface_mesh_pvtu_filename)
+
+point_mesh_information = readPointMeshInformation(sys.argv)
+
+for i in range(0, len(point_mesh_information['partition'])):
+    partition = int(point_mesh_information['partition'][i])
+    subsurface_vtu_file_name = extractFileNameWithoutPartitionNumber(bulk_vtu_filenames['filename'][0]) + '_' + str(partition) + '.vtu'
+    subsurface_vtu = readVTU(subsurface_vtu_file_name)
+
+    print(point_mesh_information['station_name'][i] + ', ' + str(extractBulkPointData(subsurface_vtu, point_mesh_information['bulk_node_id'][i], 'T')))
 
