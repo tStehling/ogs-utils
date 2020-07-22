@@ -5,6 +5,17 @@ from vtk import *
 from pathlib import Path
 from lxml import etree as ET
 
+def readPVD(filename):
+    tree = ET.parse(filename)
+    root = tree.getroot()
+    ts_files = {}
+    ts_files['ts'] = []
+    ts_files['filename'] = []
+    for dataset in root.xpath('//DataSet'):
+        ts_files['ts'].append(dataset.attrib['timestep'])
+        ts_files['filename'].append(dataset.attrib['file'])
+    return ts_files
+
 def readPVTU(filename):
     tree = ET.parse(filename)
     root = tree.getroot()
@@ -66,16 +77,22 @@ def readPointMeshInformation(argv):
         point_mesh_information['station_name'].append(station_name)
     return point_mesh_information
 
-# subsurface mesh
-subsurface_mesh_pvtu_filename = sys.argv[1]
-bulk_vtu_filenames = readPVTU(subsurface_mesh_pvtu_filename)
+# read pvd of the subsurface mesh
+timestep_filenames = readPVD(sys.argv[1])
 
+# read the point mesh information (partition number, bulk_node_id, and station
+# name)
 point_mesh_information = readPointMeshInformation(sys.argv)
 
-for i in range(0, len(point_mesh_information['partition'])):
-    partition = int(point_mesh_information['partition'][i])
-    subsurface_vtu_file_name = extractFileNameWithoutPartitionNumber(bulk_vtu_filenames['filename'][0]) + '_' + str(partition) + '.vtu'
-    subsurface_vtu = readVTU(subsurface_vtu_file_name)
+# loop over the subsurface pvtu files
+for k in range(1, len(timestep_filenames['filename'])):
+    subsurface_mesh_pvtu_filename = timestep_filenames['filename'][k]
+    bulk_vtu_filenames = readPVTU(subsurface_mesh_pvtu_filename)
 
-    print(point_mesh_information['station_name'][i] + ', ' + str(extractBulkPointData(subsurface_vtu, point_mesh_information['bulk_node_id'][i], 'T')))
+    for i in range(0, len(point_mesh_information['station_name'])):
+        partition = int(point_mesh_information['partition'][i])
+        subsurface_vtu_file_name = extractFileNameWithoutPartitionNumber(bulk_vtu_filenames['filename'][0]) + '_' + str(partition) + '.vtu'
+        subsurface_vtu = readVTU(subsurface_vtu_file_name)
+
+        print(point_mesh_information['station_name'][i] + ',' + timestep_filenames['ts'][k] + ',' + str(extractBulkPointData(subsurface_vtu, point_mesh_information['bulk_node_id'][i], 'T')))
 
