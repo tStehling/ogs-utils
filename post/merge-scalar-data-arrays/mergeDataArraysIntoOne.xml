@@ -1,0 +1,71 @@
+<tool id="merge_data_arrays_into_one" name="Merge Data Arrays Into One" version="0.1.0+galaxy0" python_template_version="3.5" profile="21.05">
+    <description>
+        Merges multiple cell data arrays into a single cell data array in a VTU file.
+    </description>
+    <requirements>
+        <requirement type="package" version="2.7">python</requirement>
+        <requirement type="package" version="8.2">vtk</requirement>
+        <requirement type="package" version="1.0" >sys</requirement>
+        <requirement type="package" version="1.0">exit</requirement>
+        <requirement type="package" version="1.0" >argv</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+    python2 $__tool_directory__/mergeCellDataArrays.py $input_file $scalar1 $scalar2 $scalar3 $scalar4 $scalar5 $scalar6 $scalar7 $scalar8 $scalar9 $scalar10 
+            $scalar11 $scalar12 $scalar13 $scalar14 $scalar15 $scalar16 $scalar17 $scalar18 $scalar19 $scalar20 $new_array_name $output_file
+
+    ]]></command>
+    <inputs>
+        <param name="input_file" type="data" format="vtu" label="Input VTU file" help="The input VTU file containing the cell data arrays" />
+        <param name="output_file" type="data" format="vtu" label="Output VTU file" help="The VTU file that will be generated" />
+        <param name="new_array_name" type="text" label="Name for New Array" help="Name for the new merged cell data array" />
+        <param name="scalar1" type="text" label="First Cell Data Array" help="Name of the first cell data array to merge" optional="true"/>
+        <param name="scalar2" type="text" label="Second Cell Data Array" help="Name of the second cell data array to merge" optional="true"/>
+        <param name="scalar3" type="text" label="Third Cell Data Array" help="Name of the third cell data array to merge" optional="true"/>
+        <param name="scalar4" type="text" label="Fourth Cell Data Array" help="Name of the fourth cell data array to merge" optional="true"/>
+        <param name="scalar5" type="text" label="Fifth Cell Data Array" help="Name of the fifth cell data array to merge" optional="true"/>
+        <param name="scalar6" type="text" label="Sixth Cell Data Array" help="Name of the sixth cell data array to merge" optional="true"/>
+        <param name="scalar7" type="text" label="Seventh Cell Data Array" help="Name of the seventh cell data array to merge" optional="true"/>
+        <param name="scalar8" type="text" label="Eighth Cell Data Array" help="Name of the eighth cell data array to merge" optional="true"/>
+        <param name="scalar9" type="text" label="Ninth Cell Data Array" help="Name of the ninth cell data array to merge" optional="true"/>
+        <param name="scalar10" type="text" label="Tenth Cell Data Array" help="Name of the tenth cell data array to merge" optional="true"/>
+        <param name="scalar11" type="text" label="Eleventh Cell Data Array" help="Name of the eleventh cell data array to merge" optional="true"/>
+        <param name="scalar12" type="text" label="Twelfth Cell Data Array" help="Name of the twelfth cell data array to merge" optional="true"/>
+        <param name="scalar13" type="text" label="Thirteenth Cell Data Array" help="Name of the thirteenth cell data array to merge" optional="true"/>
+        <param name="scalar14" type="text" label="Fourteenth Cell Data Array" help="Name of the fourteenth cell data array to merge" optional="true"/>
+        <param name="scalar15" type="text" label="Fifteenth Cell Data Array" help="Name of the fifteenth cell data array to merge" optional="true"/>
+        <param name="scalar16" type="text" label="Sixteenth Cell Data Array" help="Name of the sixteenth cell data array to merge" optional="true"/>
+        <param name="scalar17" type="text" label="Seventeenth Cell Data Array" help="Name of the seventeenth cell data array to merge" optional="true"/>
+        <param name="scalar18" type="text" label="Eighteenth Cell Data Array" help="Name of the eighteenth cell data array to merge" optional="true"/>
+        <param name="scalar19" type="text" label="Nineteenth Cell Data Array" help="Name of the nineteenth cell data array to merge" optional="true"/>
+        <param name="scalar20" type="text" label="Twentieth Cell Data Array" help="Name of the twentieth cell data array to merge" optional="true"/>
+    </inputs>
+    <outputs>
+        <data name="output_vtu" format="vtu" label="Generated Output VTU file" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="input_file" value="test_data/input.vtu"/>
+            <param name="output_file" value="output_test.vtu"/>
+            <output name="output_vtu" file="test_data/expected_output.vtu" compare="diff"/>
+            <param name="scalar1" value="ScalarArray1"/>
+            <param name="scalar2" value="ScalarArray2"/>
+            <param name="scalar3" value="ScalarArray3"/>
+            <param name="scalar4" value="ScalarArray4"/>
+            <param name="new_array_name" value="MergedArray"/>         
+        </test>
+    </tests>
+    <help><![CDATA[
+        This tool takes an input VTU file and merges multiple cell data arrays into a single cell data array. The new array is added to the VTU file and saved as the output file.
+        **Inputs**:
+        - **Input VTU file**: The VTU file containing the cell data arrays.
+        - **First to Twentieth Cell Data Array**: Names of cell data arrays to merge. Leave unused fields empty.
+        - **Name for New Array**: The name of the new merged cell data array.
+        - **Output VTU file**: The VTU file with the new merged cell data array.
+
+        **Outputs**:
+        - **Generated Output VTU file**: The VTU file with the new merged cell data array.
+    ]]></help>
+    <citations>
+        <citation type="doi">10.5281/zenodo.11652195</citation>
+    </citations>
+</tool>

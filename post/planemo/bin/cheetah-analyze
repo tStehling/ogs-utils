@@ -1,0 +1,6 @@
+#!/home/stehling/gitProjects/ogs-utils/post/planemo/bin/python3.11
+
+from Cheetah import DirectiveAnalyzer
+
+if __name__ == '__main__':
+    DirectiveAnalyzer.main()

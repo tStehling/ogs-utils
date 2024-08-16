@@ -1,0 +1,3 @@
+#!/home/stehling/gitProjects/ogs-utils/post/planemo/bin/python3.11
+from Cheetah.CheetahWrapper import _cheetah_compile
+_cheetah_compile()
