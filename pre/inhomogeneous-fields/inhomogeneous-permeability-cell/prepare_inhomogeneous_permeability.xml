@@ -1,0 +1,39 @@
+<tool id="prepare_inhomogeneous_permeability" name="Prepare Inhomogeneous Permeability" version="0.1.0+galaxy0" python_template_version="3.5" profile="21.05">
+    <description>
+        Computes the effective permeability and mass flux for a given mesh. The script uses provided CSV profiles for permeability and velocity,
+        calculates the properties, and adds them to the mesh.
+    </description>
+    <requirements>
+        <requirement type="package" version="5.9.1">paraview</requirement>
+        <requirement type="package" version="latest">inspect</requirement>
+        <requirement type="package" version="latest">argparse</requirement>
+        <requirement type="package" version="latest">os</requirement>
+        <requirement type="package" version="latest">numpy</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        pvpython $__tool_directory__/prepare-inhomogeneous-permeability.py --input "$input" --output "$output"
+        
+    ]]></command>
+    <inputs>
+        <param argument="--input" type="text" optional="false" label="input"/>
+        <param argument="--output" type="text" optional="false" label="output"/>
+
+    </inputs>
+    <outputs>
+        <data name="output_data" format="vtu" label="Mesh with Permeability and Mass Flux Properties"/>
+    </outputs>
+    <tests>
+        <test>
+            <param name="input" value="test_data/input_mesh.vtu"/>
+            <param name="output" value="test_data/output_mesh_with_properties.vtu"/>
+            
+            <output name="output_data" file="test_data/expected_output_mesh_with_properties.vtu" compare="diff"/>
+        </test>
+    </tests>
+    <help><![CDATA[
+    This tool calculates effective permeability and mass flux for a mesh using provided CSV profiles. It adds these properties to the mesh and saves the result to an output file.
+    ]]></help>
+    <citations>
+        <citation type="doi">Ahrens, James, Geveci, Berk, Law, Charles, ParaView: An End-User Tool for Large Data Visualization, Visualization Handbook, Elsevier, 2005, ISBN-13: 9780123875822</citation>
+    </citations>
+</tool>
