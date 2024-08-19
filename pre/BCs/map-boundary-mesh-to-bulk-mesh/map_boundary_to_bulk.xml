@@ -1,0 +1,40 @@
+<tool id="map_boundary_to_bulk" name="Map Boundary To Bulk" version="0.1.0+galaxy0" python_template_version="3.5" profile="21.05">
+    <description>
+        This tool maps the nodes of a boundary mesh to the corresponding nodes of a bulk mesh. 
+        The output is a mesh with a `bulk_node_ids` field, which can be used in OGS for specifying inhomogeneous boundary conditions.
+    </description>
+    <requirements>
+        <requirement type="package" version="5.9.1">paraview</requirement>
+        <requirement type="package" version="latest">inspect</requirement>
+        <requirement type="package" version="latest">argparse</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+    pvpython $__tool_directory__/map-boundary-to-bulk.py --bulk "$bulk" --boundary "$boundary" --output "$output"
+     ]]></command>
+    <inputs>
+        <param argument="--bulk" type="text" optional="false" label="bulk"/>
+        <param argument="--boundary" type="text" optional="false" label="boundary"/>
+        <param argument="--output" type="text" optional="false" label="output"/>
+
+    </inputs>
+    <outputs>
+        <data name="output_data" format="vtu" label="Mapped Boundary Mesh"/>
+    </outputs>
+    <tests>
+        <test>
+            <param name="bulk" value="test_data/bulk_mesh.vtu"/>
+            <param name="boundary" value="test_data/boundary_mesh.vtu"/>
+            <param name="output" value="test_data/mapped_boundary_output.vtu"/>
+            
+            <output name="output_data" file="test_data/expected_mapped_boundary_output.vtu" compare="diff"/>
+        </test>
+    </tests>
+    <help><![CDATA[
+        This tool takes two conforming meshes (bulk and boundary) and maps the nodes of the boundary mesh to the corresponding nodes of the bulk mesh.
+        It outputs a new boundary mesh with an additional nodal field `bulk_node_ids`, which maps the nodes of the boundary mesh to the bulk mesh.
+    ]]></help>
+    <citations>
+        <citation type="doi">Ahrens, James, Geveci, Berk, Law, Charles, ParaView: An End-User Tool for Large Data Visualization, Visualization Handbook, Elsevier, 2005, ISBN-13: 9780123875822</citation>
+    </citations>
+</tool>
+
