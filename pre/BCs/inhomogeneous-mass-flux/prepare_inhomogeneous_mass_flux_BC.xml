@@ -1,0 +1,58 @@
+<tool id="prepare_inhomogeneous_mass_flux_BC" name="Prepare Inhomogeneous Mass Flux BC" version="0.1.0+galaxy0" python_template_version="3.5" profile="21.05">
+    <description>
+        Generate an inhomogeneous node-based mass flux field along a slice through a mesh.
+    </description>
+    <requirements>
+        <requirement type="package" version="5.9.0">paraview</requirement>
+        <requirement type="package" version="1.19.2">numpy</requirement>
+        <requirement type="package" version="1.7.1">scipy</requirement>
+        <requirement type="package" version="9.0.1">vtk</requirement>
+        <requirement type="package" version="latest">__future__</requirement>
+        <requirement type="package" version="latest">inspect</requirement>
+        <requirement type="package" version="latest">argparse</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        pvpython $__tool_directory__/prepare-inhomogeneous-mass-flux-BC.py \
+            --input "$input" \
+            --output "$output" \
+            --profile "$profile" \
+            --total-flux "$total_flux" \
+            --slice-normal $slice_normal \
+            --slice-origin $slice_origin
+        ]]></command>
+    <inputs>
+        <param argument="--input" type="text" optional="false" label="input"/>
+        <param argument="--output" type="text" optional="false" label="output"/>
+        <param argument="--profile" type="text" optional="false" label="profile"/>
+        <param argument="--total-flux" type="float" optional="false" label="total_flux"/>
+        <repeat name="slice_normal_repeat" title="slice_normal_repeat" max="3">
+            <param argument="--slice-normal" type="float" optional="false" label="slice_normal"/>
+        </repeat>
+        <repeat name="slice_origin_repeat" title="slice_origin_repeat" max="3">
+            <param argument="--slice-origin" type="float" optional="false" label="slice_origin"/>
+        </repeat>
+
+    </inputs>
+    <outputs>
+        <data name="output_data" format="xml" label="Output VTU file" />
+    </outputs>
+    <tests>
+        <test>
+            <param name="input" value="test_data/input_mesh.vtu"/>
+            <param name="output" value="test_data/output.vtu"/>
+            <param name="profile" value="test_data/smooth_velocity_profile.csv"/>
+            <param name="total_flux" value="5.0"/>
+            <param name="slice_normal" value="0.0 1.0 0.0"/>
+            <param name="slice_origin" value="0.0 0.0 0.0"/>
+
+            <output name="output_data" file="test_data/expected_output.vtu" compare="diff"/>
+        </test>
+    </tests>
+    <help><![CDATA[
+        This tool prepares an inhomogeneous node-based mass flux field along a slice through a mesh. 
+        The superficial velocity is given as a profile in radial (x) direction in the file smooth_velocity_profile.csv.
+    ]]></help>
+     <citations>
+        <citation type="doi">Ahrens, James, Geveci, Berk, Law, Charles, ParaView: An End-User Tool for Large Data Visualization, Visualization Handbook, Elsevier, 2005, ISBN-13: 9780123875822</citation>
+    </citations>
+</tool>
