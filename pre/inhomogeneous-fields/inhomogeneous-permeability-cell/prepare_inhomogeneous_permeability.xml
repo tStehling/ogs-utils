@@ -4,11 +4,9 @@
         calculates the properties, and adds them to the mesh.
     </description>
     <requirements>
+        <requirement type="package" version="5.9.0">pvpython</requirement>
         <requirement type="package" version="5.9.1">paraview</requirement>
-        <requirement type="package" version="latest">inspect</requirement>
-        <requirement type="package" version="latest">argparse</requirement>
-        <requirement type="package" version="latest">os</requirement>
-        <requirement type="package" version="latest">numpy</requirement>
+        <requirement type="package" version="1.25.0">numpy</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
         pvpython $__tool_directory__/prepare-inhomogeneous-permeability.py --input "$input" --output "$output"

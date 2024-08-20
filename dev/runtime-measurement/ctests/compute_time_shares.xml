@@ -1,0 +1,54 @@
+<tool id="compute_time_shares" name="Compute Time Shares" version="0.1.0+galaxy0" python_template_version="3.5" profile="21.05">
+    <description>
+        Dieses Tool verarbeitet eine Logdatei, extrahiert Zeitdaten und gibt die kumulativen Werte aus. 
+        Optional kann die Ausgabe auch im JSON-Format gespeichert werden.
+      </description>
+    <requirements>
+        <requirement type="package" version="3.9">python</requirement>
+        <requirement type="package" version="1.9.1">argparse</requirement>
+        <requirement type="package" version="3.8">subprocess</requirement>
+        <requirement type="package" version="3.9">shlex</requirement>
+        <requirement type="package" version="2.0.9">json</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+        python3 $__tool_directory__/compute_time_shares.py --in_file "$in_file" --json-out "$json_out" --quite "$quite"
+    ]]></command>
+    <inputs>
+        <param argument="in_file" type="text" optional="false" label="in_file"/>
+        <param argument="--json-out" type="boolean" truevalue="--json-out" falsevalue="" checked="false" label="json_out"/>
+        <param argument="--quiet" type="boolean" truevalue="--quiet" falsevalue="" checked="false" label="quiet"/>
+
+    </inputs>
+    <outputs>
+        <data name="summary" format="txt" label="Summary Output" />
+      <data name="json_output" format="json" label="JSON Output" />
+    </outputs>
+    <help><![CDATA[
+        ## Timings Summary Tool
+
+Dieses Tool verarbeitet eine Logdatei, die Zeitangaben enthält, und gibt die kumulativen Zeiten für verschiedene Kategorien aus.
+
+### Eingaben
+- **Input Log File**: Die Logdatei, aus der Zeitdaten extrahiert werden sollen.
+- **Output as JSON**: Wenn aktiviert, wird die Ausgabe zusätzlich im JSON-Format gespeichert.
+- **Suppress Output**: Wenn aktiviert, wird die Ausgabe unterdrückt und nur die JSON-Datei erstellt.
+
+### Ausgaben
+- **Summary Output**: Eine Textdatei, die die kumulativen Zeiten der verschiedenen Kategorien enthält.
+- **JSON Output**: (Optional) Eine JSON-Datei, die die kumulativen Zeiten speichert.
+
+### Beispiel für die Verwendung
+Angenommen, Sie haben eine Logdatei, die Zeitdaten enthält, und möchten die kumulativen Zeiten für verschiedene Kategorien berechnen:
+1. Laden Sie die Logdatei als Eingabedatei hoch.
+2. Wählen Sie optional die JSON-Ausgabe aus, wenn Sie die Ergebnisse in einer JSON-Datei speichern möchten.
+3. Wenn Sie keine Textausgabe benötigen, aktivieren Sie das Feld "Suppress Output".
+4. Führen Sie das Tool aus.
+
+### Anforderungen
+Dieses Tool benötigt Python und die Module `argparse`, `subprocess`, `shlex`, und `json`.
+
+### Entwicklerhinweise
+Dieses Tool wurde entwickelt, um Timing-Informationen aus Logdateien zu extrahieren und zusammenzufassen. Es kann nützlich sein, um Leistungsdaten zu analysieren oder Prozesszeiten zu überwachen.
+
+    ]]></help>
+</tool>

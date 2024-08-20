@@ -1,0 +1,32 @@
+<tool id="assign_material_parameter" name="Assign Material Parameter" version="0.1.0+galaxy0" python_template_version="3.5" profile="21.05">
+    <description>
+        Assign material parameters to a VTK Unstructured Grid based on a CSV file.
+    </description>
+    <requirements>
+        <requirement type="package" version="5.9.0">paraview</requirement>
+    </requirements>
+    <command detect_errors="exit_code"><![CDATA[
+    python3 $__tool_directory__/AssignMaterialParameter.py --input_file "$input_file" --csv_file "$csv_file" --output_file "$output_file"
+    ]]></command>
+    <inputs>
+        <param name="input_file" type="data" format="vtk" label="Input VTK File"/>
+        <param name="csv_file" type="data" format="csv" label="CSV File with Material Parameters"/>
+    </inputs>
+    <outputs>
+        <data name="output_file" format="vtk" label="Output VTK File with Assigned Material Parameters"/>
+    </outputs>
+    <tests>
+        <test>
+            <param name="input_file" value="input.vtk"/>
+            <param name="csv_file" value="parameters.csv"/>
+            <output name="output_file" file="output.vtk"/>
+        </test>
+    </tests>
+    <help><![CDATA[
+        This tool assigns material parameters from a CSV file to a VTK Unstructured Grid.
+        The CSV file should have the material IDs in the first column, followed by the material parameters.
+    ]]></help>
+    <citations>
+        <citation type="doi">Ahrens, James, Geveci, Berk, Law, Charles, ParaView: An End-User Tool for Large Data Visualization, Visualization Handbook, Elsevier, 2005, ISBN-13: 9780123875822</citation>
+    </citations>
+</tool>

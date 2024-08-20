@@ -4,9 +4,8 @@
         The output is a mesh with a `bulk_node_ids` field, which can be used in OGS for specifying inhomogeneous boundary conditions.
     </description>
     <requirements>
+        <requirement type="package" version="5.9.0">pvpython</requirement>
         <requirement type="package" version="5.9.1">paraview</requirement>
-        <requirement type="package" version="latest">inspect</requirement>
-        <requirement type="package" version="latest">argparse</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
     pvpython $__tool_directory__/map-boundary-to-bulk.py --bulk "$bulk" --boundary "$boundary" --output "$output"

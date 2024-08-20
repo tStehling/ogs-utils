@@ -3,13 +3,10 @@
         Generate an inhomogeneous node-based mass flux field along a slice through a mesh.
     </description>
     <requirements>
+        <requirement type="package" version="5.9.0">pvpython</requirement>
         <requirement type="package" version="5.9.0">paraview</requirement>
         <requirement type="package" version="1.19.2">numpy</requirement>
         <requirement type="package" version="1.7.1">scipy</requirement>
-        <requirement type="package" version="9.0.1">vtk</requirement>
-        <requirement type="package" version="latest">__future__</requirement>
-        <requirement type="package" version="latest">inspect</requirement>
-        <requirement type="package" version="latest">argparse</requirement>
     </requirements>
     <command detect_errors="exit_code"><![CDATA[
         pvpython $__tool_directory__/prepare-inhomogeneous-mass-flux-BC.py \
