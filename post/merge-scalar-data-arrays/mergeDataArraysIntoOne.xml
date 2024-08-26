@@ -18,26 +18,9 @@
         <param name="input_file" type="data" format="vtu" label="Input VTU file" help="The input VTU file containing the cell data arrays" />
         <param name="output_file" type="data" format="vtu" label="Output VTU file" help="The VTU file that will be generated" />
         <param name="new_array_name" type="text" label="Name for New Array" help="Name for the new merged cell data array" />
-        <param name="scalar1" type="text" label="First Cell Data Array" help="Name of the first cell data array to merge" optional="true"/>
-        <param name="scalar2" type="text" label="Second Cell Data Array" help="Name of the second cell data array to merge" optional="true"/>
-        <param name="scalar3" type="text" label="Third Cell Data Array" help="Name of the third cell data array to merge" optional="true"/>
-        <param name="scalar4" type="text" label="Fourth Cell Data Array" help="Name of the fourth cell data array to merge" optional="true"/>
-        <param name="scalar5" type="text" label="Fifth Cell Data Array" help="Name of the fifth cell data array to merge" optional="true"/>
-        <param name="scalar6" type="text" label="Sixth Cell Data Array" help="Name of the sixth cell data array to merge" optional="true"/>
-        <param name="scalar7" type="text" label="Seventh Cell Data Array" help="Name of the seventh cell data array to merge" optional="true"/>
-        <param name="scalar8" type="text" label="Eighth Cell Data Array" help="Name of the eighth cell data array to merge" optional="true"/>
-        <param name="scalar9" type="text" label="Ninth Cell Data Array" help="Name of the ninth cell data array to merge" optional="true"/>
-        <param name="scalar10" type="text" label="Tenth Cell Data Array" help="Name of the tenth cell data array to merge" optional="true"/>
-        <param name="scalar11" type="text" label="Eleventh Cell Data Array" help="Name of the eleventh cell data array to merge" optional="true"/>
-        <param name="scalar12" type="text" label="Twelfth Cell Data Array" help="Name of the twelfth cell data array to merge" optional="true"/>
-        <param name="scalar13" type="text" label="Thirteenth Cell Data Array" help="Name of the thirteenth cell data array to merge" optional="true"/>
-        <param name="scalar14" type="text" label="Fourteenth Cell Data Array" help="Name of the fourteenth cell data array to merge" optional="true"/>
-        <param name="scalar15" type="text" label="Fifteenth Cell Data Array" help="Name of the fifteenth cell data array to merge" optional="true"/>
-        <param name="scalar16" type="text" label="Sixteenth Cell Data Array" help="Name of the sixteenth cell data array to merge" optional="true"/>
-        <param name="scalar17" type="text" label="Seventeenth Cell Data Array" help="Name of the seventeenth cell data array to merge" optional="true"/>
-        <param name="scalar18" type="text" label="Eighteenth Cell Data Array" help="Name of the eighteenth cell data array to merge" optional="true"/>
-        <param name="scalar19" type="text" label="Nineteenth Cell Data Array" help="Name of the nineteenth cell data array to merge" optional="true"/>
-        <param name="scalar20" type="text" label="Twentieth Cell Data Array" help="Name of the twentieth cell data array to merge" optional="true"/>
+        <repeat name="scalar" title="scalar">
+            <param name="array" type="text" label="Cell Data Array" help="Name of a cell data array to merge" optional="true"/>
+        </repeat>
     </inputs>
     <outputs>
         <data name="output_vtu" format="vtu" label="Generated Output VTU file" />
@@ -46,12 +29,12 @@
         <test>
             <param name="input_file" value="test_data/input.vtu"/>
             <param name="output_file" value="output_test.vtu"/>
-            <output name="output_vtu" file="test_data/expected_output.vtu" compare="diff"/>
-            <param name="scalar1" value="ScalarArray1"/>
-            <param name="scalar2" value="ScalarArray2"/>
-            <param name="scalar3" value="ScalarArray3"/>
-            <param name="scalar4" value="ScalarArray4"/>
+            <param name="array" value="Array1"/>
+            <param name="array" value="Array2"/>
+            <param name="array" value="Array3"/>
+            <param name="array" value="Array4"/>
             <param name="new_array_name" value="MergedArray"/>         
+            <output name="output_vtu" file="test_data/expected_output.vtu" compare="diff"/>
         </test>
     </tests>
     <help><![CDATA[

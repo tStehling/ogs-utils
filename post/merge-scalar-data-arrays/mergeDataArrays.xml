@@ -23,12 +23,11 @@
     </outputs>
     <tests>
         <test>
-            <param name="input_file" value="test_data/input.vtu"/>
-            <output name="output_vtu" file="test_data_output.vtu" compare="diff"/>
+            <param name="input_file" value="test_input.vtu"/>
+            <output name="output_vtu" file="test_output.vtu" compare="diff"/>
             <param name="vector_2d" value="Vector2D"/>
             <param name="scalar1" value="Scalar1"/>
             <param name="scalar2" value="Scalar2"/>
-            
         </test>
     </tests>
     <help><![CDATA[

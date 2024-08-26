@@ -3,7 +3,7 @@
         Dieses Tool verarbeitet eine Logdatei, extrahiert Zeitdaten und gibt die kumulativen Werte aus. 
         Optional kann die Ausgabe auch im JSON-Format gespeichert werden.
       </description>
-    <requirements>
+    <requirements> 
         <requirement type="package" version="3.9">python</requirement>
         <requirement type="package" version="1.9.1">argparse</requirement>
         <requirement type="package" version="3.8">subprocess</requirement>
@@ -23,32 +23,33 @@
         <data name="summary" format="txt" label="Summary Output" />
       <data name="json_output" format="json" label="JSON Output" />
     </outputs>
+    <tests>
+        <test>
+            <param name="in_file" value="test_file.txt"/>
+            <param name="json_out" value="true"/>
+            <param name="quiet" value="false"/>
+            <output name="summary" file="test_output.txt"/>
+            <output name="json_output" file="test_output.json"/>
+        </test>
+    </tests>
+    
     <help><![CDATA[
-        ## Timings Summary Tool
+       This tool processes a log file to compute and aggregate time data by category. It extracts lines containing the keyword `[time]`, calculates cumulative times for each category, and can optionally save the results in a JSON file.
 
-Dieses Tool verarbeitet eine Logdatei, die Zeitangaben enthält, und gibt die kumulativen Zeiten für verschiedene Kategorien aus.
+        **Parameters:**
+        - **Input File (`in_file`)**: The log file containing time information. The script looks for lines with the keyword `[time]`.
+        - **Output JSON File (`json_out`)**: If selected, results will be saved in a JSON file named by appending `_total_timings.json` to the input filename.
+        - **Suppress Console Output (`quiet`)**: If selected, the console output is suppressed and only the JSON file (if `json_out` is enabled) will be generated.
 
-### Eingaben
-- **Input Log File**: Die Logdatei, aus der Zeitdaten extrahiert werden sollen.
-- **Output as JSON**: Wenn aktiviert, wird die Ausgabe zusätzlich im JSON-Format gespeichert.
-- **Suppress Output**: Wenn aktiviert, wird die Ausgabe unterdrückt und nur die JSON-Datei erstellt.
+        **Functionality:**
+        - The script extracts and aggregates time data from the input file.
+        - Cumulative times for each category are calculated.
+        - Results are either printed to the console or saved in a JSON file based on the selected options.
 
-### Ausgaben
-- **Summary Output**: Eine Textdatei, die die kumulativen Zeiten der verschiedenen Kategorien enthält.
-- **JSON Output**: (Optional) Eine JSON-Datei, die die kumulativen Zeiten speichert.
-
-### Beispiel für die Verwendung
-Angenommen, Sie haben eine Logdatei, die Zeitdaten enthält, und möchten die kumulativen Zeiten für verschiedene Kategorien berechnen:
-1. Laden Sie die Logdatei als Eingabedatei hoch.
-2. Wählen Sie optional die JSON-Ausgabe aus, wenn Sie die Ergebnisse in einer JSON-Datei speichern möchten.
-3. Wenn Sie keine Textausgabe benötigen, aktivieren Sie das Feld "Suppress Output".
-4. Führen Sie das Tool aus.
-
-### Anforderungen
-Dieses Tool benötigt Python und die Module `argparse`, `subprocess`, `shlex`, und `json`.
-
-### Entwicklerhinweise
-Dieses Tool wurde entwickelt, um Timing-Informationen aus Logdateien zu extrahieren und zusammenzufassen. Es kann nützlich sein, um Leistungsdaten zu analysieren oder Prozesszeiten zu überwachen.
-
-    ]]></help>
+        **Notes:**
+        - If the `quiet` option is enabled, only the JSON output will be generated and no console output will be displayed.
+           ]]></help>
+    <citations>
+        <citation type="doi">UFZ</citation>
+    </citations>
 </tool>

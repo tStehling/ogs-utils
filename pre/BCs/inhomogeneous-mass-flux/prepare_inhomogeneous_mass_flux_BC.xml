@@ -46,8 +46,29 @@
         </test>
     </tests>
     <help><![CDATA[
-        This tool prepares an inhomogeneous node-based mass flux field along a slice through a mesh. 
-        The superficial velocity is given as a profile in radial (x) direction in the file smooth_velocity_profile.csv.
+        This tool processes `VTU` files in ParaView to perform the following tasks:
+
+        **Inputs:**
+        - **Input VTU file (`--input`)**: The input VTU file containing the cell data arrays that will be processed.
+        - **Output VTU file (`--output`)**: The VTU file that will be generated after processing.
+        - **Profile (`--profile`)**: A CSV file containing velocity profile data for mass flux computation. This file should have two columns: radial distance and velocity.
+        - **Total Flux (`--total-flux`)**: The target total mass flux value (in kg/s) that the output flux should match.
+        - **Slice Normal (`--slice-normal`)**: The normal vector of the slicing plane. Provide three float values (x, y, z).
+        - **Slice Origin (`--slice-origin`)**: The origin point of the slicing plane. Provide three float values (x, y, z).
+
+        **Functionality:**
+        - Reads an input VTU file and adds point IDs to the data.
+        - Creates a slice through the data based on the provided normal vector and origin.
+        - Converts the sliced data to an unstructured grid.
+        - Computes the mass flux using the provided profile and scales it to match the desired total flux.
+        - Saves the processed data into the specified output VTU file.
+
+        **Notes:**
+        - Ensure that the profile CSV file has the correct format with two columns for radial distance and velocity.
+        -  The slicing plane's normal vector and origin should be provided in the correct format for accurate slicing.
+
+        **Output:**
+        - The resulting VTU file will contain the processed data with added mass flux information.
     ]]></help>
      <citations>
         <citation type="doi">Ahrens, James, Geveci, Berk, Law, Charles, ParaView: An End-User Tool for Large Data Visualization, Visualization Handbook, Elsevier, 2005, ISBN-13: 9780123875822</citation>
